@@ -11,14 +11,20 @@ def get_rxn():
         side = [term.replace('_', '').upper() for term in side]
         out.append(side)
     return(out)
-rxn = get_rxn()
 
-# split rxn
-rxn = rxn.replace(" ", "").strip().split('->')
-rhs, lhs = rxn
+def get_all_rxn():
+    all_rxns = []
+    print('enter rxns. when complete, type STOP')
+    while True:
+        rxn = get_rxn()
+        if rxn[0][0].upper().strip() == 'STOP':
+            return all_rxns
+        else:
+            all_rxns.append(rxn)
+
 
 def get_detailed_info(side):
-    side = side.split('+')
+    side = side.split('+') # TODO UPDATE to work with get rxn
     side_terms = []
     side_list_terms = []
     for term in side:
@@ -54,7 +60,8 @@ def get_detailed_info(side):
 
     return(side_terms, side_list_terms)
 
-def print_detailed_info(rhs, lhs):
+def print_detailed_info(rxn):
+    lhs, rhs = rxn
     print('Detailed Information:')
     print('\t\tTerm\tCoef\tSpecies\tSubscript\tTotal Num of Species')
     print('Reactants:')
@@ -67,4 +74,32 @@ def print_detailed_info(rhs, lhs):
     for term in side_list:
         print('\t\t'.join(str(t) for t in term))
 
-print_detailed_info(rhs, lhs)
+def get_stoich_vector(rxn):
+    all_terms = {}
+    for i in range(len(rxn)):
+        coef_multiplier = i*2-1 #0-1->-1 for lhs. 2-1->1 for rhs
+        side = rxn[i].split('+')
+        for term in side:
+            coef = get_coef(term) * coef_multiplier
+            all_terms[term] = coef
+    print(all_terms)
+
+def get_coef(term):
+    term = term.replace('_', '').upper()
+    term_list = [n for n in term]
+    coef = 1
+    if term_list[0].isdigit():
+        # term DOES have coef
+        coef = int(term_list.pop(0))
+
+    return coef
+
+def get_stoich_matrix():
+    # TODO add multiple rxns
+    pass
+
+a = get_all_rxn()
+print(a)
+#rxn = get_rxn()
+#print_detailed_info(rxn)
+#get_stoich_matrix(rxn)
