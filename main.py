@@ -1,6 +1,17 @@
 import numpy as np
 
-rxn = input("Enter reactions in the form 2H2 + O2 -> 2H20:\n\t")
+def get_rxn():
+    rxn = input("Enter reactions in the form 2H2 + O2 -> 2H20:\n\t")
+    # split rxn
+    rxn = rxn.replace(" ", "").strip().split('->')
+
+    out = []
+    for side in rxn:
+        side = side.split('+')
+        side = [term.replace('_', '').upper() for term in side]
+        out.append(side)
+    return(out)
+rxn = get_rxn()
 
 # split rxn
 rxn = rxn.replace(" ", "").strip().split('->')
